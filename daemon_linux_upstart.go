@@ -197,6 +197,16 @@ func (linux *upstartRecord) SetTemplate(tplStr string) error {
 	return nil
 }
 
+// GetUser - get the user to run the service (not supported in system v)
+func (linux *upstartRecord) GetUser() string {
+	return "root"
+}
+
+// SetUser - set the user to run the service, by default it's root (not supported in system v)
+func (linux *upstartRecord) SetUser(user string) error {
+	return nil
+}
+
 var upstatConfig = `# {{.Name}} {{.Description}}
 
 description     "{{.Description}}"

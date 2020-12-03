@@ -13,7 +13,7 @@ import (
 func newDaemon(name, description string, kind Kind, dependencies []string) (Daemon, error) {
 	// newer subsystem must be checked first
 	if _, err := os.Stat("/run/systemd/system"); err == nil {
-		return &systemDRecord{name, description, kind, dependencies}, nil
+		return &systemDRecord{name, description, "root", kind, dependencies}, nil
 	}
 	if _, err := os.Stat("/sbin/initctl"); err == nil {
 		return &upstartRecord{name, description, kind, dependencies}, nil

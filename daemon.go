@@ -176,6 +176,12 @@ type Daemon interface {
 	// SetTemplate - sets service config template
 	SetTemplate(string) error
 
+	// GetUser - get the user to run the service
+	GetUser() string
+
+	// SetUser - set the user to run the service, by default it's root
+	SetUser(string) error
+
 	// Install the service into the system
 	Install(args ...string) (string, error)
 

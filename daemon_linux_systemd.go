@@ -16,6 +16,7 @@ import (
 type systemDRecord struct {
 	name         string
 	description  string
+	user         string
 	kind         Kind
 	dependencies []string
 }
@@ -72,7 +73,7 @@ func (linux *systemDRecord) Install(args ...string) (string, error) {
 	}
 	defer file.Close()
 
-	execPatch, err := executablePath(linux.name)
+	execPath, err := executablePath(linux.name)
 	if err != nil {
 		return installAction + failed, err
 	}
@@ -85,12 +86,13 @@ func (linux *systemDRecord) Install(args ...string) (string, error) {
 	if err := templ.Execute(
 		file,
 		&struct {
-			Name, Description, Dependencies, Path, Args string
+			Name, Description, User, Dependencies, Path, Args string
 		}{
 			linux.name,
 			linux.description,
+			linux.user,
 			strings.Join(linux.dependencies, " "),
-			execPatch,
+			execPath,
 			strings.Join(args, " "),
 		},
 	); err != nil {
@@ -211,12 +213,24 @@ func (linux *systemDRecord) SetTemplate(tplStr string) error {
 	return nil
 }
 
+// GetUser - get the user to run the service
+func (linux *systemDRecord) GetUser() string {
+	return linux.user
+}
+
+// SetUser - set the user to run the service, by default it's root
+func (linux *systemDRecord) SetUser(user string) error {
+	linux.user = user
+	return nil
+}
+
 var systemDConfig = `[Unit]
 Description={{.Description}}
 Requires={{.Dependencies}}
 After={{.Dependencies}}
 
 [Service]
+User={{.User}}
 PIDFile=/var/run/{{.Name}}.pid
 ExecStartPre=/bin/rm -f /var/run/{{.Name}}.pid
 ExecStart={{.Path}} {{.Args}}

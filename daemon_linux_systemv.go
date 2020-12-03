@@ -219,6 +219,16 @@ func (linux *systemVRecord) SetTemplate(tplStr string) error {
 	return nil
 }
 
+// GetUser - get the user to run the service (not supported in system v)
+func (linux *systemVRecord) GetUser() string {
+	return "root"
+}
+
+// SetUser - set the user to run the service, by default it's root (not supported in system v)
+func (linux *systemVRecord) SetUser(user string) error {
+	return nil
+}
+
 var systemVConfig = `#! /bin/sh
 #
 #       /etc/rc.d/init.d/{{.Name}}

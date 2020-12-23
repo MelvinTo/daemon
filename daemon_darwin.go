@@ -248,3 +248,12 @@ var propertyList = `<?xml version="1.0" encoding="UTF-8"?>
 </dict>
 </plist>
 `
+//dummy implementation for mac build
+func (darwin *darwinRecord) GetUser() string {
+    return ""
+}
+
+//dummy implementation for mac build
+func (darwin *darwinRecord) SetUser(user string) error {
+    return nil
+}
